@@ -7,6 +7,8 @@ var htmlmin = require("gulp-htmlmin");
 var runSequence = require("run-sequence");
 var uglify = require("gulp-uglify");
 var bytediff = require("gulp-bytediff");
+var imagemin = require('gulp-imagemin');
+var svgmin = require('gulp-svgmin');
 
 var size = require("filesize"),
   gutil = require("gulp-util"),
@@ -76,6 +78,29 @@ gulp.task("html", function() {
     .pipe(gulp.dest("./dist"));
 });
 
+gulp.task('image', () =>
+    gulp.src(['src/**/*.png','src/**/*.jpg','src/**/*.jpeg','src/**/*.gif'])
+    .pipe(bytediff.start())
+        .pipe(imagemin())
+    .pipe(
+      bytediff.stop(function(data) {
+        return byteDiffCB(data);
+      })
+    )
+        .pipe(gulp.dest('dist'))
+);
+
+gulp.task('svg', function () {
+    return gulp.src('logo.svg')
+	.pipe(bytediff.start())
+        .pipe(svgmin())
+    	.pipe(
+      	bytediff.stop(function(data) {
+        	return byteDiffCB(data);
+      		})
+    	)
+        .pipe(gulp.dest('./out'));
+});
 // Clean output directory
 gulp.task("clean", () => del(["dist"]));
 gulp.task("print-size", function() {
@@ -83,5 +108,5 @@ gulp.task("print-size", function() {
 });
 // Gulp task to minify all files
 gulp.task("default", ["clean"], function() {
-  runSequence("html", "css", "js", "print-size");
+  runSequence("html", "css", "js", "images","svg", "print-size");
 });
