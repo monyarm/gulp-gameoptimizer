@@ -5,7 +5,7 @@ var gulp = require("gulp");
 var csso = require("gulp-csso");
 var del = require("del");
 var htmlmin = require("gulp-htmlmin");
-var uglify = require("gulp-uglify");
+var terser = require("gulp-terser");
 var bytediff = require("gulp-bytediff");
 var imagemin = require("gulp-imagemin");
 var svgmin = require("gulp-svgmin");
@@ -161,10 +161,10 @@ gulp.task("css", function() {
 gulp.task("js", function() {
   return (
     gulp
-      .src(conf["js"])
+      .src(conf["css"])
       .pipe(bytediff.start())
       // Minify the file
-      .pipe(uglify())
+      .pipe(terser())
       // Output
       .pipe(
         bytediff.stop(function(data) {
