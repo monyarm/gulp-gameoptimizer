@@ -4,6 +4,11 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 
 ## Currently supported file formats:
 
+### Executables
+
+- EXE
+- DLL
+
 ### Scripts and Markup:
 
 - HTML
@@ -17,4 +22,4 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 - JPG
 - JPEG
 - SVG
-- MTL
+- OBJ
