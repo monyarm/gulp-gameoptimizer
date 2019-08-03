@@ -161,7 +161,7 @@ gulp.task("css", function() {
 gulp.task("js", function() {
   return (
     gulp
-      .src(conf["css"])
+      .src(conf["js"])
       .pipe(bytediff.start())
       // Minify the file
       .pipe(terser())
