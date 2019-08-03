@@ -7,7 +7,6 @@
     "gulp": "^4.0.2",
     "gulp-csso": "^2.0.0",
     "gulp-htmlmin": "^3.0.0",
-    "gulp-uglify": "^2.0.0",
     "run-sequence": "^1.2.2"
   },
   "engines": {
@@ -19,6 +18,7 @@
     "gulp-imagemin": "^6.0.0",
     "gulp-luaminify": "0.0.1",
     "gulp-svgmin": "^2.2.0",
+    "gulp-terser": "^1.2.0",
     "gulp-util": "^3.0.8",
     "pure-uuid": "^1.5.7",
     "through2": "^3.0.1",
