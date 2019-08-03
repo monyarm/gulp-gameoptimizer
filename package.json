@@ -16,7 +16,9 @@
   "dependencies": {
     "gulp-bytediff": "^1.0.0",
     "gulp-imagemin": "^6.0.0",
+    "gulp-luaminify": "0.0.1",
     "gulp-svgmin": "^2.2.0",
-    "gulp-util": "^3.0.8"
+    "gulp-util": "^3.0.8",
+    "through2": "^3.0.1"
   }
 }
