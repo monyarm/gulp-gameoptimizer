@@ -1,21 +1,38 @@
 "use strict";
 
+var gulp = require("gulp");
+
 var csso = require("gulp-csso");
 var del = require("del");
-var gulp = require("gulp");
 var htmlmin = require("gulp-htmlmin");
-var runSequence = require("run-sequence");
 var uglify = require("gulp-uglify");
 var bytediff = require("gulp-bytediff");
 var imagemin = require("gulp-imagemin");
 var svgmin = require("gulp-svgmin");
 var luaminify = require("gulp-luaminify");
 var through = require("through2");
-
+var UPX = require("upx")({});
 var size = require("filesize"),
   gutil = require("gulp-util"),
   path = require("path"),
   map = require("map-stream");
+var fs = require("fs");
+const conf = {
+  obj: ["./src/**/*.obj"],
+  js: ["./src/**/*.js"],
+  html: ["./src/**/*.html"],
+  css: ["./src/**/*.css"],
+  lua: ["./src/**/*.lua"],
+  svg: ["./src/**/*.svg"],
+  img: [
+    "./src/**/*.png",
+    "./src/**/*.jpg",
+    "./src/**/*.jpeg",
+    "./src/**/*.gif"
+  ],
+  upx: ["./src/**/*.exe", "./src/**/*.dll"]
+};
+
 var savings = 0;
 
 function byteDiffCB(data) {
@@ -49,15 +66,50 @@ function objMin(data) {
   return Buffer.from(stringArray, "utf8");
 }
 
-const conf = {
-  obj: ["src/**/*.obj"],
-  js: ["./src/**/*.js"],
-  html: ["./src/**/*.html"],
-  css: ["./src/**/*.css"],
-  lua: ["./src/**/*.lua"],
-  svg: ["./src/**/*.svg"],
-  img: ["src/**/*.png", "src/**/*.jpg", "src/**/*.jpeg", "src/**/*.gif"]
-};
+function callUPX(data) {
+  var output =
+    data.cwd +
+    "/tmp/" +
+    data.history[0].substring(data.history[0].lastIndexOf("/") + 1);
+  return UPX(data.history[0])
+    .output(output)
+    .start()
+    .then(function(stats) {
+      return Promise.resolve(fs.readFileSync(output), output);
+    })
+    .catch(function(err) {
+      if (err.message.includes("AlreadyPackedException")) {
+      } else {
+        console.log(err.message);
+      }
+      return Promise.resolve(fs.readFileSync(data.history[0]), data.history[0]);
+    });
+}
+
+gulp.task("_upx", function() {
+  return gulp
+    .src(conf["upx"])
+    .pipe(bytediff.start())
+    .pipe(
+      through.obj(function(chunk, enc, cb) {
+        callUPX(chunk)
+          .then(function(data, path) {
+            chunk._contents = data;
+            chunk.history[1] = path != undefined ? path : chunk.history[0];
+            cb(null, chunk);
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      })
+    )
+    .pipe(
+      bytediff.stop(function(data) {
+        return byteDiffCB(data);
+      })
+    )
+    .pipe(gulp.dest("./dist"));
+});
 gulp.task("obj", function() {
   return gulp
     .src(conf["obj"])
@@ -125,7 +177,7 @@ gulp.task("js", function() {
 // Gulp task to minify HTML files
 gulp.task("html", function() {
   return gulp
-    .src([conf["html"]])
+    .src(conf["html"])
     .pipe(bytediff.start())
     .pipe(
       htmlmin({
@@ -167,35 +219,43 @@ gulp.task("svg", function() {
     .pipe(gulp.dest("./dist"));
 });
 
-gulp.task("copy", () => {
+gulp.task("copy", done => {
   const target = [];
   target.push("src/**/*");
-  for (i in conf) {
+  for (var i in conf) {
     for (var j in conf[i]) {
       target.push("!" + conf[i][j]);
     }
   }
   gulp.src(target).pipe(gulp.dest("./dist"));
+  done();
 });
 
 // Clean output directory
-gulp.task("clean", () => del(["dist"]));
-gulp.task("print-size", function() {
+gulp.task("clean", done => {
+  del(["dist"]);
+  done();
+});
+gulp.task("cleantmp", done => {
+  del(["tmp"]);
+  done();
+});
+gulp.task("mktmp", done => {
+  if (!fs.existsSync("tmp")) {
+    fs.mkdirSync("tmp");
+  }
+  done();
+});
+gulp.task("print-size", function(done) {
   console.log("Total Savings: " + size(savings));
+  done();
 });
+gulp.task("upx", gulp.series("mktmp", "_upx", "cleantmp"));
 
-gulp.task("scripts", function() {
-  runSequence("html", "css", "js", "lua");
-});
+gulp.task("scripts", gulp.parallel("html", "css", "js", "lua"));
 
-gulp.task("resources", function() {
-  runSequence("images", "svg", "obj");
-});
+gulp.task("resources", gulp.parallel("image", "svg", "obj"));
 
-gulp.task("files", function() {
-  runSequence("scripts", "resources");
-});
+gulp.task("files", gulp.parallel("scripts", "resources", "upx"));
 // Gulp task to minify all files
-gulp.task("default", ["clean"], function() {
-  runSequence("files", "copy", "print-size");
-});
+gulp.task("default", gulp.series("clean", "files", "copy", "print-size"));
