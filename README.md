@@ -8,13 +8,23 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 
 - EXE
 - DLL
+- PE
+- LE
+- ELF
+- COM
+- SYS
+- SLUS/SLEU/SLJP
 
 ### Scripts and Markup:
 
 - HTML
+- HTM
+- PHP
+- FTL
 - CSS
 - JS
 - Lua
+- GLSL
 
 ### Resources:
 

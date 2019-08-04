@@ -10,6 +10,10 @@ var bytediff = require("gulp-bytediff");
 var imagemin = require("gulp-imagemin");
 var svgmin = require("gulp-svgmin");
 var luaminify = require("gulp-luaminify");
+var glsl = require("gulp-glsl");
+var ftlmin = require("gulp-ftlmin");
+import { phpMinify } from "@cedx/gulp-php-minify";
+
 var through = require("through2");
 var UPX = require("upx")({});
 var size = require("filesize"),
@@ -20,17 +24,32 @@ var fs = require("fs");
 const conf = {
   obj: ["./src/**/*.obj"],
   js: ["./src/**/*.js"],
-  html: ["./src/**/*.html"],
+  html: ["./src/**/*.html", "./src/**/*.htm"],
   css: ["./src/**/*.css"],
   lua: ["./src/**/*.lua"],
   svg: ["./src/**/*.svg"],
+  glsl: ["./src/**/*.glsl"],
+  ftl: ["./src/**/*.ftl"],
+  php: ["./src/**/*.php"],
+
   img: [
     "./src/**/*.png",
     "./src/**/*.jpg",
     "./src/**/*.jpeg",
     "./src/**/*.gif"
   ],
-  upx: ["./src/**/*.exe", "./src/**/*.dll"]
+  upx: [
+    "./src/**/*.exe",
+    "./src/**/*.dll",
+    "./src/**/*.elf",
+    "./src/**/*.pe",
+    "./src/**/*.com",
+    "./src/**/*.le",
+    "./src/**/*.sys",
+    "./src/**/SLUS*.*",
+    "./src/**/SLEU*.*",
+    "./src/**/SLJP*.*"
+  ]
 };
 
 var savings = 0;
@@ -86,7 +105,7 @@ function callUPX(data) {
     });
 }
 
-gulp.task("_upx", function() {
+gulp.task("upx", function() {
   return gulp
     .src(conf["upx"])
     .pipe(bytediff.start())
@@ -103,11 +122,7 @@ gulp.task("_upx", function() {
           });
       })
     )
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop(byteDiffCB(data)))
     .pipe(gulp.dest("./dist"));
 });
 gulp.task("obj", function() {
@@ -120,11 +135,7 @@ gulp.task("obj", function() {
         cb(null, chunk);
       })
     )
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop(byteDiffCB(data)))
     .pipe(gulp.dest("./dist"));
 });
 
@@ -133,11 +144,7 @@ gulp.task("lua", function() {
     .src(conf["lua"])
     .pipe(bytediff.start())
     .pipe(luaminify())
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop(byteDiffCB(data)))
     .pipe(gulp.dest("./dist"));
 });
 // Gulp task to minify CSS files
@@ -149,11 +156,7 @@ gulp.task("css", function() {
       // Minify the file
       .pipe(csso())
       // Output
-      .pipe(
-        bytediff.stop(function(data) {
-          return byteDiffCB(data);
-        })
-      )
+      .pipe(bytediff.stop(byteDiffCB(data)))
       .pipe(gulp.dest("./dist"))
   );
 });
@@ -166,11 +169,7 @@ gulp.task("js", function() {
       // Minify the file
       .pipe(terser())
       // Output
-      .pipe(
-        bytediff.stop(function(data) {
-          return byteDiffCB(data);
-        })
-      )
+      .pipe(bytediff.stop(byteDiffCB(data)))
       .pipe(gulp.dest("./dist"))
   );
 });
@@ -185,11 +184,7 @@ gulp.task("html", function() {
         removeComments: true
       })
     )
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop(byteDiffCB(data)))
     .pipe(gulp.dest("./dist"));
 });
 
@@ -198,11 +193,7 @@ gulp.task("image", () =>
     .src(conf["img"])
     .pipe(bytediff.start())
     .pipe(imagemin())
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop())
     .pipe(gulp.dest("./dist"))
 );
 
@@ -211,11 +202,34 @@ gulp.task("svg", function() {
     .src(conf["svg"])
     .pipe(bytediff.start())
     .pipe(svgmin())
-    .pipe(
-      bytediff.stop(function(data) {
-        return byteDiffCB(data);
-      })
-    )
+    .pipe(bytediff.stop(byteDiffCB(data)))
+    .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("glsl", function() {
+  return gulp
+    .src(conf["glsl"])
+    .pipe(bytediff.start())
+    .pipe(glsl())
+    .pipe(bytediff.stop(byteDiffCB(data)))
+    .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("ftl", function() {
+  return gulp
+    .src(conf["ftl"])
+    .pipe(bytediff.start())
+    .pipe(ftlmin())
+    .pipe(bytediff.stop(byteDiffCB(data)))
+    .pipe(gulp.dest("./dist"));
+});
+
+gulp.task("php", function() {
+  return gulp
+    .src(conf["php"])
+    .pipe(bytediff.start())
+    .pipe(phpMinify({ silent: true }))
+    .pipe(bytediff.stop(byteDiffCB(data)))
     .pipe(gulp.dest("./dist"));
 });
 
@@ -232,15 +246,9 @@ gulp.task("copy", done => {
 });
 
 // Clean output directory
-gulp.task("clean", done => {
+gulp.task("init", done => {
   del(["dist"]);
-  done();
-});
-gulp.task("cleantmp", done => {
   del(["tmp"]);
-  done();
-});
-gulp.task("mktmp", done => {
   if (!fs.existsSync("tmp")) {
     fs.mkdirSync("tmp");
   }
@@ -250,12 +258,18 @@ gulp.task("print-size", function(done) {
   console.log("Total Savings: " + size(savings));
   done();
 });
-gulp.task("upx", gulp.series("mktmp", "_upx", "cleantmp"));
 
-gulp.task("scripts", gulp.parallel("html", "css", "js", "lua"));
+gulp.task(
+  "scripts",
+  gulp.parallel("html", "css", "js", "lua", "glsl", "ftl", "php")
+);
+
+gulp.task("help", function() {
+  console.log("Required executables in PATH: php, upx(mac)");
+});
 
 gulp.task("resources", gulp.parallel("image", "svg", "obj"));
 
 gulp.task("files", gulp.parallel("scripts", "resources", "upx"));
 // Gulp task to minify all files
-gulp.task("default", gulp.series("clean", "files", "copy", "print-size"));
+gulp.task("default", gulp.series("init", "files", "copy", "print-size"));
