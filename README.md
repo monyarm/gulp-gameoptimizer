@@ -19,10 +19,11 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 
 - HTML
 - HTM
-- PHP
+- PHP (Currently Broken)
 - FTL
 - CSS
 - JS
+- JSON
 - Lua
 - GLSL
 
