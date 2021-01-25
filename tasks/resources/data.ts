@@ -6,14 +6,23 @@ import {byteDiffCB} from "@tasks/util"
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 //@ts-ignore
-import jsonmin from "gulp-jsonmin"
+import prettyData from "gulp-pretty-data"
 
-export default function json()  {
-    return src(conf["json"])
+export default function data()  {
+    return src(conf["data"])
     .pipe(plumber({ errorHandler: false}))
     .pipe(bytediff.start())
     // Minify the file
-    .pipe(jsonmin())
+    .pipe(prettyData({
+      type: 'minify',
+      preserveComments: false,
+      extensions: {
+        'xlf': 'xml',
+        'rss': 'xml',
+        'svg': 'xml',
+        'dae': 'xml'
+      }
+    }))
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))

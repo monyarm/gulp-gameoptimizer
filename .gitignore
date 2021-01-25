@@ -64,3 +64,9 @@ typings/
 src
 dist
 tmp
+gulpfile.js
+
+# Python things to ignore
+python_modules
+__pycache__
+*.pyc

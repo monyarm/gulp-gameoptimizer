@@ -7,33 +7,23 @@ import "map-stream"
 
 import { init, copy, printSize, clean } from "@tasks/util"
 
-import _html from "@tasks/scripts/html"
-export const html = _html;
-import _css from "@tasks/scripts/css"
-export const css = _css;
-import _js from "@tasks/scripts/js"
-export const js = _js;
-import _json from "@tasks/scripts/json"
-export const json = _json;
-import _lua from "@tasks/scripts/lua"
-export const lua = _lua;
-import _glsl from "@tasks/scripts/glsl"
-export const glsl = _glsl;
-import _ftl from "@tasks/scripts/ftl"
-export const ftl = _ftl;
-import _obj from "@tasks/resources/obj"
-export const obj = _obj;
-import _svg from "@tasks/resources/svg"
-export const svg = _svg;
-import _image from "@tasks/resources/image"
-export const image = _image;
-import _upx from "@tasks/upx"
-export const upx = _upx;
+import html from "@tasks/scripts/html"
+import css from "@tasks/scripts/css"
+import js from "@tasks/scripts/js"
+import lua from "@tasks/scripts/lua"
+import py from "@tasks/scripts/py"
+import glsl from "@tasks/scripts/glsl"
+import ftl from "@tasks/scripts/ftl"
+import obj from "@tasks/resources/obj"
+import data from "@tasks/resources/data"
+import image from "@tasks/resources/image"
+import upx from "@tasks/upx"
+export {html,css,js,json,glsl,ftl, py,/*php,*/obj,data,image,upx}
 //import php from "@tasks/scripts/php"
 
-export const scripts = parallel(html, css, js, json, lua, /*php*/ glsl , ftl);
+export const scripts = parallel(html, css, js, lua, py, /*php*/ glsl , ftl);
 
-export const resources = series(image, svg, obj);
+export const resources = series(image, obj,data);
 
 export const files = series(scripts, resources, upx);
 

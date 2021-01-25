@@ -39,10 +39,23 @@
     "gulp-svgmin": "^2.2.0",
     "gulp-terser": "^1.2.0",
     "gulp-util": "^3.0.8",
+    "nopy": "^0.2.7",
     "pure-uuid": "^1.5.7",
     "through2": "^3.0.1",
     "tmp": "^0.1.0",
     "transfob": "^1.0.0",
     "upx": "^1.0.6"
+  },
+  "python": {
+    "dependencies": {
+      "": ">=2.4.1"
+    }
+  },
+  "scripts": {
+    "install": "npip install",
+    "i": "npip install",
+    "nopenv": "nopenv",
+    "nopy": "nopy",
+    "npip": "npip"
   }
 }

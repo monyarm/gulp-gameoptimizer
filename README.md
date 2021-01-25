@@ -17,14 +17,15 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 
 ### Scripts and Markup:
 
-- HTML
-- HTM
+- HTML (HTM)
 - PHP (Currently Broken)
 - FTL
 - CSS
 - JS
 - JSON
 - Lua
+- PY
+- XML (XLF, SVG, RSS, XHTML, DAE)
 - GLSL
 
 ### Resources:
@@ -32,5 +33,4 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 - PNG
 - JPG
 - JPEG
-- SVG
 - OBJ
