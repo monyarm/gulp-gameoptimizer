@@ -38,7 +38,7 @@ export default function upx()  {
     .pipe(
       through.obj(function(chunk, enc, cb) {
         callUPX(chunk)
-          .then((data: any, path: undefined) => {
+          .then((data: any, path: any | undefined) => {
               chunk._contents = data
               chunk.history[1] = path != undefined ? path : chunk.history[0]
               cb(null, chunk)
