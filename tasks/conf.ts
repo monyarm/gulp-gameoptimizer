@@ -13,6 +13,7 @@ const conf: Record<string,Array<string>> = {
         "./src/**/*.png",
         "./src/**/*.jpg",
         "./src/**/*.jpeg",
+        "./src/**/*.jpe",
         "./src/**/*.gif"
     ],
     data: [
@@ -22,7 +23,7 @@ const conf: Record<string,Array<string>> = {
         "./src/**/*.dae",
         "./src/**/*.xlf",
         "./src/**/*.rss"
-    ]
+    ],
     upx: [
         "./src/**/*.exe",
         "./src/**/*.dll",

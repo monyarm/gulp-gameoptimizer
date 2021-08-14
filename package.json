@@ -36,6 +36,7 @@
     "gulp-jsonmin": "^1.2.0",
     "gulp-luaminify": "0.0.1",
     "gulp-minify-inline": "^1.1.0",
+    "gulp-pretty-data": "^0.1.2",
     "gulp-svgmin": "^2.2.0",
     "gulp-terser": "^1.2.0",
     "gulp-util": "^3.0.8",
@@ -46,11 +47,7 @@
     "transfob": "^1.0.0",
     "upx": "^1.0.6"
   },
-  "python": {
-    "dependencies": {
-      "": ">=2.4.1"
-    }
-  },
+  "python": {},
   "scripts": {
     "install": "npip install",
     "i": "npip install",

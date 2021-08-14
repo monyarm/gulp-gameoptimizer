@@ -18,7 +18,7 @@ import obj from "@tasks/resources/obj"
 import data from "@tasks/resources/data"
 import image from "@tasks/resources/image"
 import upx from "@tasks/upx"
-export {html,css,js,json,glsl,ftl, py,/*php,*/obj,data,image,upx}
+export {html,css,js,/*json,*/glsl,ftl, py,/*php,*/obj,data,image,upx}
 //import php from "@tasks/scripts/php"
 
 export const scripts = parallel(html, css, js, lua, py, /*php*/ glsl , ftl);
