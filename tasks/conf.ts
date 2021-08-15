@@ -1,12 +1,12 @@
-const conf: Record<string,Array<string>> = {
-    obj: ["./src/**/*.obj","./src/**/*.mtl"],
+const conf: Record<string, Array<string>> = {
+    obj: ["./src/**/*.obj", "./src/**/*.mtl", "!./src/**/objects/old_enemies.obj"],
     js: ["./src/**/*.js"],
     html: ["./src/**/*.html", "./src/**/*.htm"],
     css: ["./src/**/*.css"],
     lua: ["./src/**/*.lua"],
     glsl: ["./src/**/*.glsl"],
     ftl: ["./src/**/*.ftl"],
-    php: ["./src/**/*.php"],
+    //php: ["./src/**/*.php"],
     py: ["./src/**/*.py"],
 
     img: [
@@ -25,18 +25,34 @@ const conf: Record<string,Array<string>> = {
         "./src/**/*.rss"
     ],
     upx: [
+        "./src/**/*.x86",
+        "./src/**/*.x86_64",
         "./src/**/*.exe",
         "./src/**/*.dll",
+        "./src/**/*.ndll",
         "./src/**/*.elf",
         "./src/**/*.pe",
         "./src/**/*.com",
         "./src/**/*.le",
         "./src/**/*.sys",
         "./src/**/*.so",
+        "./src/**/*.so.*",
         "./src/**/SLUS*.*",
         "./src/**/SLEU*.*",
-        "./src/**/SLJP*.*"
-    ]
+        "./src/**/SLJP*.*",
+        "./src/**/bin/minetest",
+        "./src/**/opensonic_bin",
+        "./src/**/openttd",
+        "./src/**/binaries/system/ActorEditor",
+        "./src/**/binaries/system/pyrogenesis",
+        "./src/**/bin_unix/linux_64_client",
+        "./src/**/bin_unix/linux_64_server",
+        "./src/**/bin_unix/linux_client",
+        "./src/**/bin_unix/linux_server",
+        "./src/**/doomrl",
+        "./src/**/libs/Dwarf_Fortress",
+        "./src/**/Funkin",
+    ],
 };
 export default conf;
 

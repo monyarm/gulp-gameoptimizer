@@ -37,6 +37,7 @@
     "gulp-luaminify": "0.0.1",
     "gulp-minify-inline": "^1.1.0",
     "gulp-pretty-data": "^0.1.2",
+    "gulp-run": "^1.7.1",
     "gulp-svgmin": "^2.2.0",
     "gulp-terser": "^1.2.0",
     "gulp-util": "^3.0.8",
@@ -47,7 +48,12 @@
     "transfob": "^1.0.0",
     "upx": "^1.0.6"
   },
-  "python": {},
+  "python": {
+    "dependencies": {
+      "pyminifier": "~=2.1",
+      "unrpa": "~=2.3.0"
+    }
+  },
   "scripts": {
     "install": "npip install",
     "i": "npip install",

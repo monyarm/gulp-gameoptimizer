@@ -6,12 +6,14 @@ import { byteDiffCB } from "@tasks/util"
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 //@ts-ignore
-import  ftlmin from "gulp-ftlmin"
+import ftlmin from "gulp-ftlmin"
 
 
 export default function ftl() {
-  return src(conf["ftl"])
-    .pipe(plumber({ errorHandler: false}))
+  return src(conf["ftl"], {
+    dot: true
+  })
+    .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
     // Minify the file
     .pipe(ftlmin())

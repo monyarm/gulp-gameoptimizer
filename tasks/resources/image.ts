@@ -10,13 +10,15 @@ import imagemin from "gulp-imagemin-fix"
 
 
 export default function image() {
-  return src(conf["img"])
-    .pipe(plumber({ errorHandler: false }))
-    .pipe(bytediff.start())
-    // Minify the file
-    .pipe(imagemin())
-    // Output
-    .pipe(plumber.stop())
-    .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    return src(conf["img"], {
+        dot: true
+    })
+        .pipe(plumber({ errorHandler: false }))
+        .pipe(bytediff.start())
+        // Minify the file
+        .pipe(imagemin())
+        // Output
+        .pipe(plumber.stop())
+        .pipe(bytediff.stop(byteDiffCB))
+        .pipe(dest("./dist"))
 }

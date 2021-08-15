@@ -7,13 +7,15 @@ import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 import htmlmin from "gulp-htmlmin"
 //@ts-ignore
-import minifyinline from "gulp-minify-inline"
+var minifyInline = require('gulp-minify-inline');
 
 export default function html() {
-  return src(conf["html"])
+  return src(conf["html"], {
+    dot: true
+  })
     .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
-    .pipe(minifyinline)
+    .pipe(minifyInline())
     .pipe(
       htmlmin({
         collapseWhitespace: true,

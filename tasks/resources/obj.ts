@@ -28,7 +28,9 @@ function objMin(data: string) {
 }
 
 export default function obj() {
-  return src(conf["obj"])
+  return src(conf["obj"], {
+    dot: true
+  })
     .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
     // Minify the file

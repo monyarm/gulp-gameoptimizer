@@ -1,7 +1,7 @@
 
-import {task,series,parallel,src,dest} from "gulp"
+import { task, series, parallel, src, dest } from "gulp"
 import conf from "@tasks/conf"
-import {byteDiffCB} from "@tasks/util"
+import { byteDiffCB } from "@tasks/util"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
@@ -17,39 +17,41 @@ function callUPX(data: { cwd: string; history: any[] }) {
   return UPX(data.history[0])
     .output(output)
     .start()
-    .then(function(stats: any) {
-      return Promise.resolve(fs.readFileSync(output)/*, output*/);
+    .then(function (stats: any) {
+      return Promise.resolve({ bytes: fs.readFileSync(output), path: output });
     })
-    .catch(function(err: { message: string | string[] }) {
-      if (err.message.includes("AlreadyPackedException")) {
+    .catch(function (err: { message: string | string[] }) {
+      if (err.message.includes("AlreadyPackedException") || err.message.includes("CantPackException")) {
       } else {
+        console.log("\n")
         console.log(err.message);
       }
-      return Promise.resolve(fs.readFileSync(data.history[0])/*, data.history[0]*/);
+      return Promise.resolve({ bytes: fs.readFileSync(data.history[0]), path: data.history[0] });
     });
 }
 
 
-export default function upx()  {
-    return src(conf["upx"])
-    .pipe(plumber({ errorHandler: false}))
+export default function upx() {
+  return src(conf["upx"], {
+    dot: true
+  })
+    .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
     // Minify the file
     .pipe(
-      through.obj(function(chunk, enc, cb) {
+      through.obj(function (chunk, enc, cb) {
         callUPX(chunk)
-          .then((data: any, path: any | undefined) => {
-              chunk._contents = data
-              chunk.history[1] = path != undefined ? path : chunk.history[0]
-              cb(null, chunk)
-            })
+          .then((data: { bytes: any, path: any | undefined }) => {
+            chunk._contents = data.bytes
+            cb(null, chunk)
+          })
           .catch((err: any) => {
-              console.log(err)
-            });
+            console.log(err)
+          });
       })
     )
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
     .pipe(dest("./dist"))
-  }
+}

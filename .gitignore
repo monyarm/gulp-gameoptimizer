@@ -70,3 +70,6 @@ gulpfile.js
 python_modules
 __pycache__
 *.pyc
+
+# Libreoffice
+.~lock.*
