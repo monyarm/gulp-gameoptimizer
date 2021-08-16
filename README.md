@@ -18,7 +18,6 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 ### Scripts and Markup:
 
 - HTML (HTM)
-- PHP (Currently Broken)
 - FTL
 - CSS
 - JS
