@@ -34,3 +34,12 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 - JPG
 - JPEG
 - OBJ
+
+
+The following software must be installed to run gulp-gameoptimizer:
+- NodeJS
+- Typescript
+- TSNode
+- Gulp
+- Python3
+- UPX

@@ -8,6 +8,7 @@ const conf: Record<string, Array<string>> = {
     ftl: ["./src/**/*.ftl"],
     //php: ["./src/**/*.php"],
     py: ["./src/**/*.py"],
+    sh: ["./src/**/*.sh"],
 
     img: [
         "./src/**/*.png",
@@ -52,6 +53,10 @@ const conf: Record<string, Array<string>> = {
         "./src/**/doomrl",
         "./src/**/libs/Dwarf_Fortress",
         "./src/**/Funkin",
+        "./src/**/EDOPro",
+        "./src/**/freeorion/freeorion",
+        "./src/**/freeoriond",
+        "./src/**/freeorionca",
     ],
 };
 export default conf;

@@ -58,16 +58,16 @@ export function printSize(done: () => void) {
 };
 
 export function help() {
-    console.log("Required executables in PATH: php, python3, upx(mac)");
+    console.log("Required executables in PATH: python3, upx");
 };
 
 const exec = promisify(require('child_process').exec);
 
-export async function pyrun(path: string, command: string, args: string = "") {
+export async function run(path: string, command: string, args: string = "", args2: string= "") {
 
     try {
 
-        const { stdout, stderr } = await exec(`npm run -s nopy -- python_modules/bin/${command} ${args} "${path}"`);
+        const { stdout, stderr } = await exec(`${command} ${args} "${path}" ${args2}`);
         if (stderr.length > 0) {
             return Promise.resolve(fs.readFileSync(path));
         }
@@ -76,4 +76,9 @@ export async function pyrun(path: string, command: string, args: string = "") {
         //console.log(e); 
         return Promise.resolve(fs.readFileSync(path));
     }
+}
+
+export async function pyrun(path: string, command: string, args: string = "", args2: string= "") {
+
+    return run(path, `npm run -s nopy -- python_modules/bin/${command}`,args, args2)
 }

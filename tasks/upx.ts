@@ -1,7 +1,7 @@
 
 import { task, series, parallel, src, dest } from "gulp"
 import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import { byteDiffCB, run } from "@tasks/util"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
@@ -17,7 +17,7 @@ function callUPX(data: { cwd: string; history: any[] }) {
   return UPX(data.history[0])
     .output(output)
     .start()
-    .then(function (stats: any) {
+    .then(function () {
       return Promise.resolve({ bytes: fs.readFileSync(output), path: output });
     })
     .catch(function (err: { message: string | string[] }) {
@@ -38,16 +38,13 @@ export default function upx() {
     .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
     // Minify the file
+    
     .pipe(
       through.obj(function (chunk, enc, cb) {
-        callUPX(chunk)
-          .then((data: { bytes: any, path: any | undefined }) => {
-            chunk._contents = data.bytes
-            cb(null, chunk)
-          })
-          .catch((err: any) => {
-            console.log(err)
-          });
+        run(chunk.history[0], "upx", "", `-o "${chunk.cwd}/tmp/${chunk.history[0].substring(chunk.history[0].lastIndexOf("/") + 1)}"`).then((data) => {
+          chunk._contents = data;
+          cb(null, chunk);
+        })
       })
     )
     // Output
