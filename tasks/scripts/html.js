@@ -1,16 +1,16 @@
 
-import { task, series, parallel, src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 import htmlmin from "gulp-htmlmin"
 //@ts-ignore
-var minifyInline = require('gulp-minify-inline');
+import * as minifyInline from 'gulp-minify-inline';
 
 export default function html() {
-  return src(conf["html"], {
+  return gulp.src(conf["html"], {
     dot: true
   })
     .pipe(plumber({ errorHandler: false }))
@@ -23,5 +23,5 @@ export default function html() {
       })
     )
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"));
+    .pipe(gulp.dest("./dist"));
 }

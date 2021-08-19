@@ -1,7 +1,7 @@
 
-import { task, series, parallel, src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
@@ -9,7 +9,7 @@ import plumber from "gulp-plumber"
 import prettyData from "gulp-pretty-data"
 
 export default function data() {
-  return src(conf["data"], {
+  return gulp.src(conf["data"], {
     dot: true
   })
     .pipe(plumber({ errorHandler: false }))
@@ -28,5 +28,5 @@ export default function data() {
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    .pipe(gulp.dest("./dist"))
 }

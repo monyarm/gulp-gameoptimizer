@@ -1,7 +1,7 @@
 
-import { src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
@@ -13,7 +13,7 @@ import * as fs from "fs"
 
 
 export default function glsl() {
-  return src(conf["glsl"], {
+  return gulp.src(conf["glsl"], {
     dot: true
   })
     .pipe(plumber())
@@ -29,10 +29,10 @@ export default function glsl() {
     // Output    
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    .pipe(gulp.dest("./dist"))
 }
 
-async function doGLSL(code: Buffer, path: string): Promise<any> {
+async function doGLSL(code, path) {
   try {
     const minified = await (glslman.string(
       glslman.parse(code.toString()),

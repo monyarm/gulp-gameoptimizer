@@ -1,17 +1,17 @@
 
-import { task, series, parallel, src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 import through from "through2"
 
-function objMin(data: string) {
-  var stringArray: any = data.split("\n");
+function objMin(data) {
+  var stringArray = data.split("\n");
   stringArray = stringArray
-    .filter((n: string[]) => n[0] != "#")
-    .filter((n: string) => n.trim() != "");
+    .filter((n) => n[0] != "#")
+    .filter((n) => n.trim() != "");
   for (var i = 0; i < stringArray.length; i++) {
 
     stringArray[i] = stringArray[i].split(" ");
@@ -28,7 +28,7 @@ function objMin(data: string) {
 }
 
 export default function obj() {
-  return src(conf["obj"], {
+  return gulp.src(conf["obj"], {
     dot: true
   })
     .pipe(plumber({ errorHandler: false }))
@@ -43,5 +43,5 @@ export default function obj() {
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    .pipe(gulp.dest("./dist"))
 }

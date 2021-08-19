@@ -1,4 +1,4 @@
-const conf: Record<string, Array<string>> = {
+const conf = {
     obj: ["./src/**/*.obj", "./src/**/*.mtl", "!./src/**/objects/old_enemies.obj"],
     js: ["./src/**/*.js"],
     html: ["./src/**/*.html", "./src/**/*.htm"],

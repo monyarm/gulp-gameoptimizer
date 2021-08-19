@@ -1,7 +1,7 @@
 
-import { task, series, parallel, src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
@@ -9,7 +9,7 @@ import plumber from "gulp-plumber"
 import { phpMinify } from "@cedx/gulp-php-minify"
 
 export default function php() {
-  return src(conf["php"], {
+  return gulp.src(conf["php"], {
     dot: true
   })
     .pipe(plumber({ errorHandler: false }))
@@ -19,5 +19,5 @@ export default function php() {
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    .pipe(gulp.dest("./dist"))
 }

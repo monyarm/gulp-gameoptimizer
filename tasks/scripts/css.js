@@ -1,23 +1,23 @@
 
-import { task, series, parallel, src, dest } from "gulp"
-import conf from "@tasks/conf"
-import { byteDiffCB } from "@tasks/util"
+import gulp from "gulp"
+import conf from "../conf.js"
+import { byteDiffCB } from "../util.js"
 //@ts-ignore
 import bytediff from "gulp-bytediff"
 import plumber from "gulp-plumber"
 //@ts-ignore
-import luaminify from "gulp-luaminify"
+import cleancss from "gulp-clean-css"
 
-export default function lua() {
-  return src(conf["lua"], {
+export default function css() {
+  return gulp.src(conf["css"], {
     dot: true
   })
     .pipe(plumber({ errorHandler: false }))
     .pipe(bytediff.start())
     // Minify the file
-    .pipe(luaminify())
+    .pipe(cleancss())
     // Output
     .pipe(plumber.stop())
     .pipe(bytediff.stop(byteDiffCB))
-    .pipe(dest("./dist"))
+    .pipe(gulp.dest("./dist"))
 }
