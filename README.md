@@ -18,7 +18,6 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 ### Scripts and Markup:
 
 - HTML (HTM)
-- PHP (Currently Broken)
 - FTL
 - CSS
 - JS
@@ -27,6 +26,7 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 - PY
 - XML (XLF, SVG, RSS, XHTML, DAE)
 - GLSL
+- SH
 
 ### Resources:
 
@@ -38,8 +38,6 @@ A gulpfile that is specifically made to optimize and reduce the size of games.
 
 The following software must be installed to run gulp-gameoptimizer:
 - NodeJS
-- Typescript
-- TSNode
 - Gulp
 - Python3
 - UPX
